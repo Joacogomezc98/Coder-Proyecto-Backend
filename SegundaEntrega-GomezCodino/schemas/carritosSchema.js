@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 const CarritosSchema = new mongoose.Schema({
-    timestamp: {type: String, required: true},
+    timestamp: {type: Date, required: true},
     products: {type: Array, required: false, max: 100}
 })
 

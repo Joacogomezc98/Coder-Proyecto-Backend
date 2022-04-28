@@ -26,7 +26,7 @@ export default class ContenedorMongo {
             const items = await this.collection.find()
             return items
         }catch(e){
-            console.log(e)
+            throw new Error(e)
         }
     }
 
@@ -46,7 +46,7 @@ export default class ContenedorMongo {
             const deletedItem = await this.collection.findOneAndDelete({"_id": id})
             return deletedItem
         }catch(e){
-            console.log(e)
+            throw new Error("Id not found")
         }
     }
 
@@ -56,7 +56,7 @@ export default class ContenedorMongo {
             const newItem = await this.collection.create(item)
             return newItem
         }catch(e){
-            console.log(e)
+            throw new Error(`Error al guardar: ${e}`)
         }
     }
 

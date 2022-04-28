@@ -55,6 +55,7 @@ productRouter.get('/:id', (req, res) => {
 // RECIBE Y AGREGA UN PRODUCTO, LO DEVUELVE CON SU ID ASIGNADO
 productRouter.post('/', (req, res) => {
     const newProduct = req.body
+    newProduct.timestamp = new Date()
 
     const administrador = newProduct.admin
 
@@ -121,7 +122,7 @@ productRouter.delete('/:id', (req, res) => {
 // CREA UN CARRITO Y DEVUELVE EL ID
 cartRouter.post('/', (req, res) => {
     const newCart = {
-        timestamp: Date.now(),
+        timestamp: new Date(),
         productos: []
     }
 

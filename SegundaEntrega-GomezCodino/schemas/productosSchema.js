@@ -6,7 +6,7 @@ const ProductosSchema = new mongoose.Schema({
     price: {type: Number, required: true, max: 100000},
     stock: {type: Number, required: true, max: 100},
     thumbnail: {type: String, required: true, max: 100},
-    timestamp: {type: String, required: true},
+    timestamp: {type: Date, required: true},
 
 
 })
