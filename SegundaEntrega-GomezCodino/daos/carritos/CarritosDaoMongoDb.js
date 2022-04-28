@@ -7,13 +7,22 @@ class CarritosMongo extends ContenedorMongo {
      }
 
      async addProduct(id, product){
-        const updatedCart =  await this.collection.findOneAndUpdate({"_id": id},{$push: {"products": product}})
-        return updatedCart
+         try{
+             const updatedCart =  await this.collection.findOneAndUpdate({"_id": id},{$push: {"products": product}})
+             return updatedCart
+         }catch(e){
+             console.log(e)
+         }
      }
 
      async deleteProduct(cartID, prodID){
-         const deletedCart = await this.collection.findOneAndUpdate({"_id": cartID},{$pull: {"products":{"_id": prodID}}})
-         return deletedCart
+         try{
+             const deletedCart = await this.collection.findOneAndUpdate({"_id": cartID},{$pull: {"products":{"_id": prodID}}})
+             return deletedCart
+         }catch(e){
+             console.log(e)
+             return ("Something Went Wrong")
+         }
      }
 
 }

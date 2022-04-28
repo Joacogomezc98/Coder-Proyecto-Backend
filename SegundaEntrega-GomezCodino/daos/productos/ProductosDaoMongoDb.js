@@ -7,7 +7,17 @@ class ProductosMongo extends ContenedorMongo {
      }
 
      async modifyProduct(modProduct, id) {
-         await super.collection.updateOne({"_id": id},{$set: {modProduct}})
+         try{
+             await this.collection.updateOne({"_id": id},{$set: {title: modProduct.title},
+             $set:{price: modProduct.price},
+             $set:{thumbnail: modProduct.thumbnail},
+             $set:{timestamp: modProduct.timestamp},
+             $set:{stock: modProduct.stock}})
+             return ("Product Edited Successfully")
+         }catch(e){
+             console.log(e)
+             return("This Id does not belong to a product")
+         }
      }
 
 }

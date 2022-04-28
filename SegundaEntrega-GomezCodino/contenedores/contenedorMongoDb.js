@@ -22,23 +22,42 @@ export default class ContenedorMongo {
     
 
     async getAll() {
-        const items = await this.collection.find()
-        return items
+        try{
+            const items = await this.collection.find()
+            return items
+        }catch(e){
+            console.log(e)
+        }
     }
 
     async getById(id) {
-        const item = await this.collection.find({'_id': id})
-        return item
+        try{
+            const item = await this.collection.findOne({'_id': id})
+            return item
+        }catch(e){
+            console.log(e)
+            const item = false
+            return item
+        }
     }
 
     async deleteById(id) {
-       const deletedItem = await this.collection.findOneAndDelete({"_id": id})
-       return deletedItem
+        try{
+            const deletedItem = await this.collection.findOneAndDelete({"_id": id})
+            return deletedItem
+        }catch(e){
+            console.log(e)
+        }
     }
 
     async create(item){
-        const newItem = await this.collection.save(item)
-        return newItem
+        try{
+
+            const newItem = await this.collection.create(item)
+            return newItem
+        }catch(e){
+            console.log(e)
+        }
     }
 
 }

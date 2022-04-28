@@ -39,18 +39,12 @@ productRouter.get('/', (req, res) => {
 
 // DEVOLVER PROD SEGUN ID
 productRouter.get('/:id', (req, res) => {
-    // Verifico que ID sea un numero
-    if (isNaN(req.params.id)) {
-        res.send({ error: "ID is not a number" })
-        return
-    }
-    const id = parseInt(req.params.id)
+    const id = req.params.id
 
     productosApi.getById(id)
         .then(idProd => {
             // Verifico que el producto exista
-            console.log(idProd)
-            if (idProd.length === 0) {
+            if (!idProd) {
                 res.send({ error: "Product not found" })
             }
             res.send(idProd)
@@ -87,14 +81,11 @@ productRouter.put('/:id', (req, res) => {
 
     } else {
 
-        if (isNaN(req.params.id)) {
-            res.send({ error: "ID is not a number" })
-            return
-        }
-        const id = parseInt(req.params.id)
+        const id = req.params.id
 
         productosApi.modifyProduct(modProduct, id)
-            .then(() => res.send("The product has been edited successfully"))
+            .then((response) => res.send(response))
+            .catch((response) => res.send(response))
 
     }
 
@@ -109,11 +100,7 @@ productRouter.delete('/:id', (req, res) => {
         res.send({ error: "Request not authorized" })
     } else {
 
-        if (isNaN(req.params.id)) {
-            res.send({ error: "ID is not a number" })
-            return
-        }
-        const id = parseInt(req.params.id)
+        const id = req.params.id
 
         productosApi.deleteById(id)
             .then(deletedProd => {
@@ -147,11 +134,8 @@ cartRouter.post('/', (req, res) => {
 //VACIA UN CARRITO Y LO ELIMINA
 cartRouter.delete('/:id', (req, res) => {
 
-    if (isNaN(req.params.id)) {
-        res.send({ error: "ID is not a number" })
-        return
-    }
-    const id = parseInt(req.params.id)
+   
+    const id = req.params.id
 
     carritoApi.deleteById(id)
         .then(deletedCart => {
@@ -167,18 +151,13 @@ cartRouter.delete('/:id', (req, res) => {
 // LISTAR TODOS LOS PRODUCTOS GUARDADOS EN EL CARRITO
 cartRouter.get("/:id/productos", (req, res) => {
 
-    if (isNaN(req.params.id)) {
-        res.send({ error: "ID is not a number" })
-        return
-    }
-
-    const id = parseInt(req.params.id)
+    const id = req.params.id
 
     carritoApi.getById(id)
-        .then(cartSearch => {
-            if (cartSearch.cart) {
-                if (cartSearch.products.length !== 0) {
-                    res.send(cartSearch.products)
+        .then(cart => {
+            if (cart) {
+                if (cart.products.length !== 0) {
+                    res.send(cart.products)
                 } else {
                     res.send("No products where found in this cart :(")
                 }
@@ -192,11 +171,8 @@ cartRouter.get("/:id/productos", (req, res) => {
 //AGREGAR UN PRODUCTO AL CARRITO POR SU ID
 
 cartRouter.post("/:id/productos", (req, res) => {
-    if (isNaN(req.params.id)) {
-        res.send({ error: "ID is not a number" })
-        return
-    }
-    const id = parseInt(req.params.id)
+  
+    const id = req.params.id
 
     const prodID = req.body.id
 
@@ -225,31 +201,14 @@ cartRouter.post("/:id/productos", (req, res) => {
 // ELIMINAR UN PRODUCTO DEL CARRITO POR SU ID DE CARRITO Y DE PRODUCTO
 
 cartRouter.delete("/:id/productos/:id_prod", (req, res) => {
-    if (isNaN(req.params.id)) {
-        res.send({ error: "Cart ID is not a number" })
-        return
-    }
 
-    if (isNaN(req.params.id_prod)) {
-        res.send({ error: "Product ID is not a number" })
-        return
-    }
-
-    const cartID = parseInt(req.params.id)
-    const prodID = parseInt(req.params.id_prod)
+    const cartID = req.params.id
+    const prodID = req.params.id_prod
 
     carritoApi.deleteProduct(cartID, prodID)
-        .then(deleteProd => {
-            if (deleteProd.cart) {
-                if (deleteProd.product) {
-                    res.send("Product deleted")
-                } else {
-                    res.send({ error: "Product not found" })
-                }
-            } else {
-                res.send({ error: "Cart not found" })
-            }
-        })
+    
+        .then(cart => res.send(cart))
+        .catch(resp => res.send(resp))
 
 })
 
