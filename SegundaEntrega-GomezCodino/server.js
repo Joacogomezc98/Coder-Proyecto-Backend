@@ -44,11 +44,11 @@ productRouter.get('/:id', (req, res) => {
     productosApi.getById(id)
         .then(idProd => {
             // Verifico que el producto exista
-            if (!idProd) {
-                res.send({ error: "Product not found" })
-            }
             res.send(idProd)
         })
+        .catch(
+            res.send({ error: "Product not found" })
+        )
 
 })
 
@@ -154,17 +154,19 @@ cartRouter.get("/:id/productos", (req, res) => {
     const id = req.params.id
 
     carritoApi.getById(id)
-        .then(cart => {
-            if (cart) {
-                if (cart.products.length !== 0) {
-                    res.send(cart.products)
-                } else {
-                    res.send("No products where found in this cart :(")
-                }
-            } else {
-                res.send({ error: "The cart ID is incorrect" })
-            }
-        })
+        // .then(cart => {
+        //     if (cart) {
+        //         if (cart.products.length !== 0) {
+        //             res.send(cart.products)
+        //         } else {
+        //             res.send("No products where found in this cart :(")
+        //         }
+        //     } else {
+        //         res.send({ error: "The cart ID is incorrect" })
+        //     }
+        // })
+        .then(cart => res.send(cart.productos))
+        .catch(err => res.send(err))
 
 })
 
@@ -177,23 +179,29 @@ cartRouter.post("/:id/productos", (req, res) => {
     const prodID = req.body.id
 
     productosApi.getById(prodID)
-        .then(product => {
+    .then((product) => {
+        carritoApi.addProduct(id,product)
+        .then(() => res.send("Product added"))
+        .catch((e) => res.send(e))
+    })
+    .catch((e) => res.send(e))
+        // .then(product => {
 
-            // Verifico que el producto exista
-            if (!product) {
-                res.send({ error: "Producto no encontrado" })
-            } else {
-                carritoApi.addProduct(id, product)
-                    .then(cart => {
-                        if (cart) {
-                            res.send("Your product has been added to the cart!")
-                        } else {
-                            res.send({ error: "The cart ID is incorrect" })
-                        }
-                    })
+        //     // Verifico que el producto exista
+        //     if (!product) {
+        //         res.send({ error: "Producto no encontrado" })
+        //     } else {
+        //         carritoApi.addProduct(id, product)
+        //             .then(cart => {
+        //                 if (cart) {
+        //                     res.send("Your product has been added to the cart!")
+        //                 } else {
+        //                     res.send({ error: "The cart ID is incorrect" })
+        //                 }
+        //             })
 
-            }
-        })
+        //     }
+        // })
 
 
 })
@@ -207,7 +215,7 @@ cartRouter.delete("/:id/productos/:id_prod", (req, res) => {
 
     carritoApi.deleteProduct(cartID, prodID)
     
-        .then(cart => res.send(cart))
+        .then(cart => res.send(`${cart} has been deleted from the cart`))
         .catch(resp => res.send(resp))
 
 })

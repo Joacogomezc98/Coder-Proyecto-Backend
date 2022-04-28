@@ -7,7 +7,7 @@ class ProductosFirebase extends ContenedorFirebase {
 
     async modifyProduct(modProduct, id) {
         try {
-            const doc = super.query.doc(id)
+            const doc = this.query.doc(id)
             let item = await doc.update(modProduct);
             console.log("se actualizo", item)
         }catch(e) {

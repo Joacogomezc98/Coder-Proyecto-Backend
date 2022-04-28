@@ -1,4 +1,5 @@
 import ContenedorFirebase from  "../../contenedores/contenedorFirebase.js"
+import {FieldValue} from 'firebase-admin/firestore'
 
 class CarritosFirebase extends ContenedorFirebase {
     constructor(){
@@ -7,20 +8,23 @@ class CarritosFirebase extends ContenedorFirebase {
 
      async deleteProduct(cartID, prodID){
         try {
-            const doc = super.query.doc(cartID)
+            const doc = this.query.doc(cartID)
+            const getDoc = await this.query.doc(cartID).get()
             let item = await doc.update({
-                products: super.query.doc(cartID).get().products.filter(products => products.id !== prodID)
+                products: getDoc.data().products.filter(products => products.id !== prodID)
             });
             console.log("se elimino el producto", item)
+            return item
         }catch(e) {
-            console.log(e)
+            throw new Error(`Error al listar por id: ${e}`)
+
         }
      }
 
 
     async addProduct(id, product) {
         try {
-            const doc = super.query.doc(id)
+            const doc = this.query.doc(id)
             let item = await doc.update({
                 products: FieldValue.arrayUnion(product)
             });

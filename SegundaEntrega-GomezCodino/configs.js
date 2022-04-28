@@ -13,5 +13,5 @@ export default {
       "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-eptyf%40e-drink-backend.iam.gserviceaccount.com"
     }
     ,
-    db: "mongodb"
+    db: "firebase"
   }
